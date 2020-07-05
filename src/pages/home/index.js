@@ -27,9 +27,11 @@ export default function HomePage() {
   const [pokemonsSearch, setPokemonsSearch] = useState([]);
 
   useEffect(() => {
-    const localHostCart = JSON.parse(localStorage.getItem('pokemonCart'));
+    if (cart.length === 0) {
+      const localHostCart = JSON.parse(localStorage.getItem('pokemonCart'));
 
-    if (localHostCart) setCart(localHostCart);
+      if (localHostCart) setCart(localHostCart);
+    }
 
     if (pokemons.length === 0)
       axios
@@ -42,7 +44,7 @@ export default function HomePage() {
         .catch((e) => {
           console.log(e);
         });
-  }, [pokemons]);
+  }, [pokemons, cart]);
 
   const onSelectItem = (item) => {
     cart.push(item);
@@ -65,9 +67,9 @@ export default function HomePage() {
           pokemon.name.toLowerCase().includes(text.toLowerCase())
         )
       );
-    } else {
-      setPokemonsSearch([]);
+      return;
     }
+    setPokemonsSearch([]);
   };
 
   return (
