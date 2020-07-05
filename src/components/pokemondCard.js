@@ -23,13 +23,13 @@ const Card = styled.div`
 `;
 
 export default (props) => {
-  const [pokemon, setPokemon] = useState(props.pokemon);
-  const [imgUrl, setImgUrl] = useState(
+  const [pokemon] = useState(props.pokemon);
+  const [imgUrl] = useState(
     `https://github.com/PokeAPI/sprites/blob/master/sprites/pokemon/${pokemon.id}.png?raw=true`
   );
   const [isLoadingImg, setIsLoadingImg] = useState(true);
   const [toManyRequests, setTomanyRequests] = useState(false);
-  const [price, setPrice] = useState(pokemon.id * 100);
+  const [price] = useState(pokemon.id * 100);
 
   const handlerClick = () => {
     props.onSelectItem({ ...pokemon, imgUrl, price });
