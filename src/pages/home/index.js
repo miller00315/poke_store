@@ -1,30 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Modal from 'react-modal';
 
 import PokemonCard from '../../components/pokemondCard';
 import SearchBar from '../../components/searchBar';
 import PokemonCart from '../../components/pokemonCart';
+import * as styled from './styled';
+
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+};
+
+Modal.setAppElement(document.getElementById('root'));
 
 export default function HomePage() {
   const [pokemons, setPokemons] = useState([]);
   const [cart, setCart] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [pokemonsSearch, setPokemonsSearch] = useState([]);
 
   useEffect(() => {
-    const cart = JSON.parse(localStorage.getItem('pokemonCart'));
+    const localHostCart = JSON.parse(localStorage.getItem('pokemonCart'));
 
-    if (cart) setCart(cart);
+    if (localHostCart) setCart(localHostCart);
 
-    axios
-      .get(
-        'https://raw.githubusercontent.com/Biuni/PokemonGO-Pokedex/master/pokedex.json'
-      )
-      .then((res) => {
-        setPokemons(res.data.pokemon);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, []);
+    if (pokemons.length === 0)
+      axios
+        .get(
+          'https://raw.githubusercontent.com/Biuni/PokemonGO-Pokedex/master/pokedex.json'
+        )
+        .then((res) => {
+          setPokemons(res.data.pokemon);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+  }, [pokemons]);
 
   const onSelectItem = (item) => {
     cart.push(item);
@@ -32,32 +50,62 @@ export default function HomePage() {
     localStorage.setItem('pokemonCart', JSON.stringify(cart));
   };
 
-  const onEndBuy = () => {
+  const onEndBuy = () => setShowModal(true);
+
+  const handlerModalClose = (event) => {
+    setShowModal(false);
     localStorage.clear();
     setCart([]);
+  };
+
+  const onTextChanged = (text) => {
+    if (text !== '') {
+      setPokemonsSearch(
+        pokemons.filter((pokemon) =>
+          pokemon.name.toLowerCase().includes(text.toLowerCase())
+        )
+      );
+    } else {
+      setPokemonsSearch([]);
+    }
   };
 
   return (
     <main>
       <div className="row">
-        <SearchBar />
+        <SearchBar onTextChanged={onTextChanged} />
       </div>
       <div className="row" style={{ padding: 30 }}>
         <div className="col-md-9 col-sm-8 mb-12">
           <div className="row">
-            {pokemons.map((pokemon) => (
-              <PokemonCard
-                pokemon={pokemon}
-                key={pokemon.id}
-                onSelectItem={onSelectItem}
-              />
-            ))}
+            {pokemonsSearch.length === 0
+              ? pokemons.map((pokemon) => (
+                  <PokemonCard
+                    pokemon={pokemon}
+                    key={pokemon.id}
+                    onSelectItem={onSelectItem}
+                  />
+                ))
+              : pokemonsSearch.map((pokemon) => (
+                  <PokemonCard
+                    pokemon={pokemon}
+                    key={pokemon.id}
+                    onSelectItem={onSelectItem}
+                  />
+                ))}
           </div>
         </div>
         <div className="col-md-3 col-sm-4 mb-12">
           <PokemonCart cart={cart} onEndBuy={onEndBuy} />
         </div>
       </div>
+      <Modal isOpen={showModal} style={customStyles} contentLabel="PokeStore">
+        <h2>Parabéns</h2>
+        <h5>Compra realizada consucesso!!</h5>
+        <styled.Button onClick={() => handlerModalClose()}>
+          Fechar
+        </styled.Button>
+      </Modal>
     </main>
   );
 }

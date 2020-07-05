@@ -7,6 +7,7 @@ export default (props) => {
         <input
           placeholder="Pokemon"
           className="form-control mx-auto"
+          onChange={(event) => props.onTextChanged(event.target.value)}
           style={{
             backgroundColor: 'white transparent',
             height: '1.75em',
