@@ -31,12 +31,12 @@ export default (props) => {
             />
           </div>
           <div className="col-md-9">
-            <text>{props.item.name}</text>
+            <p>{props.item.name}</p>
           </div>
         </div>
       </div>
       <div className="col">
-        <text>{`R$ ${props.item.price}`}</text>
+        <p>{`R$ ${props.item.price}`}</p>
       </div>
     </div>
   );

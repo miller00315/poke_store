@@ -25,12 +25,16 @@ export default function HomePage() {
   const [cart, setCart] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [pokemonsSearch, setPokemonsSearch] = useState([]);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     if (cart.length === 0) {
       const localHostCart = JSON.parse(localStorage.getItem('pokemonCart'));
 
-      if (localHostCart) setCart(localHostCart);
+      if (localHostCart) {
+        setCart(localHostCart);
+        setTotal(localHostCart.reduce((acu, item) => acu + item.price, 0));
+      }
     }
 
     if (pokemons.length === 0)
@@ -44,17 +48,18 @@ export default function HomePage() {
         .catch((e) => {
           console.log(e);
         });
-  }, [pokemons, cart]);
+  }, [pokemons, cart, total]);
 
   const onSelectItem = (item) => {
     cart.push(item);
     setCart(cart);
     localStorage.setItem('pokemonCart', JSON.stringify(cart));
+    setTotal(cart.reduce((acu, item) => acu + item.price, 0));
   };
 
   const onEndBuy = () => setShowModal(true);
 
-  const handlerModalClose = (event) => {
+  const handlerModalClose = () => {
     setShowModal(false);
     localStorage.clear();
     setCart([]);
@@ -98,7 +103,7 @@ export default function HomePage() {
           </div>
         </div>
         <div className="col-md-3 col-sm-4 mb-12">
-          <PokemonCart cart={cart} onEndBuy={onEndBuy} />
+          <PokemonCart cart={cart} onEndBuy={onEndBuy} total={total} />
         </div>
       </div>
       <Modal isOpen={showModal} style={customStyles} contentLabel="PokeStore">
