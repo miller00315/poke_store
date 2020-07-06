@@ -108,7 +108,7 @@ export default function HomePage() {
       </div>
       <Modal isOpen={showModal} style={customStyles} contentLabel="PokeStore">
         <h2>Parabéns</h2>
-        <h5>Compra realizada consucesso!!</h5>
+        <h5>Compra realizada com sucesso!!</h5>
         <styled.Button onClick={() => handlerModalClose()}>
           Fechar
         </styled.Button>
