@@ -63,6 +63,7 @@ export default function HomePage() {
     setShowModal(false);
     localStorage.clear();
     setCart([]);
+    setTotal(0);
   };
 
   const onTextChanged = (text) => {
