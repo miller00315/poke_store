@@ -2,7 +2,7 @@
 
 ## Descrição
 
-<p align="justify">Projeto que envolve o desenvolvimento de uma Poke Store para o assigment da semana 17 do programa Hiring Coders da Fama Academy</P>
+<p align="justify">Projeto que envolve o desenvolvimento de uma Poke Store para o assigment da semana 17 do programa Hiring Coders da Gama Academy</P>
 
 ![Badge](https://img.shields.io/static/v1?label=react&message=framework&color=blue&style=for-the-badge&logo=REACT)
 <br/>
